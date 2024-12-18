@@ -27,7 +27,7 @@ public class PlaceController {
         placeService.printApiKey();
 
         placeService.tryPlaceApi();
-        return "index";
+        return "embedmap";
     }
     
 }
