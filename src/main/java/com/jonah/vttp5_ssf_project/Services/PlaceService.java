@@ -53,7 +53,7 @@ public class PlaceService {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.set("X-Goog-Api-Key", apikey); //REMOVE THE API KEY
-        headers.set("X-Goog-FieldMask", "places.displayName");
+        headers.set("X-Goog-FieldMask", "places.id,places.displayName,places.formattedAddress");
 
         JsonReader jsonReader = Json.createReader(new StringReader(requestBody));
         JsonObject jsonObject = jsonReader.readObject();
