@@ -25,6 +25,8 @@ public class PlaceController {
     @GetMapping("/apikey")
     public String printapikey(Model Model){
         placeService.printApiKey();
+
+        placeService.tryPlaceApi();
         return "index";
     }
     
