@@ -97,7 +97,8 @@ public class PlaceService {
         return redisData;
     }
 
-    public void parsePlaceObjects(String redisData){
+
+    public List<Place> parsePlaceObjects(String redisData){
         List<Place> allPlaces = new ArrayList<>();
         JsonReader jsonReader = Json.createReader(new StringReader(redisData));
         JsonObject entireJsonObject = jsonReader.readObject();
@@ -105,9 +106,44 @@ public class PlaceService {
 
         for(Integer i = 0; i < placesArray.size(); i++){
             JsonObject placeObject = placesArray.getJsonObject(i);
-            System.out.println("Reading Json place object from redisData string:" + placeObject.toString() + "\n");
+            //System.out.println("Reading Json place object from redisData string:" + placeObject.toString() + "\n");
+            Place place = new Place();
+            place.setId(placeObject.getString("id"));
+            try {
+                place.setAddress(placeObject.getString("formattedAddress", "Data Not Available"));
+                
+                place.setGoogleMapsUrl(placeObject.getString("googleMapsUri", "Data Not Available"));
+                place.setPriceLevel(placeObject.getString("priceLevel", "Data Not Available"));
+                place.setDisplayName(placeObject.getJsonObject("displayName").getString("text","Data Not Available"));
 
+                try {
+                    place.setRating(Double.parseDouble(placeObject.get("rating").toString()));
+
+                } catch (Exception e) {
+                    // TODO: handle exception
+                    place.setRating(-1);
+                }
+                
+                try {
+                    place.setLowerPriceRange(Integer.parseInt(placeObject.getJsonObject("priceRange").getJsonObject("startPrice").getString("units", "1")));
+                    place.setUpperPriceRange(Integer.parseInt(placeObject.getJsonObject("priceRange").getJsonObject("endPrice").getString("units", "1")));
+                } catch (Exception e) {
+                    // TODO: handle exception
+                    place.setLowerPriceRange(-1);
+                    place.setUpperPriceRange(-1);
+                }
+                
+
+            } catch (Exception e) {
+                System.out.println("problem getting certain fields from json object     " + e);
+                continue;
+                // TODO: handle exception
+            }
+            allPlaces.add(place);
+            //System.out.println("the place object generated from reading redis:" + place.toString() + "\n");
         }
+        System.out.println("all places objects read from redis:" + allPlaces);
+        return allPlaces;
     }
 
 
