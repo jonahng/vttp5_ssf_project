@@ -55,8 +55,27 @@ public class PlaceController {
         String redisData = placeService.readFromRedis(sessionName, sessionName);
         List<Place> allPlaces = placeService.parsePlaceObjects(redisData);
         model.addAttribute("allPlaces", allPlaces);
+        System.out.println("\n Highest Rated Place is:" + placeService.highestRatedPlace(allPlaces));
 
         return "redisData";
+    }
+
+    @GetMapping("/suggestion")
+    public String suggestPlace(HttpSession httpSession, Model model){
+        String sessionName = httpSession.getAttribute("fullName").toString();
+        model.addAttribute("sessionName", sessionName);
+
+        String redisData = placeService.readFromRedis(sessionName, sessionName);
+        List<Place> allPlaces = placeService.parsePlaceObjects(redisData);
+        //model.addAttribute("allPlaces", allPlaces);
+
+        Place highestRatedPlace = placeService.highestRatedPlace(allPlaces);
+        System.out.println("\n Highest Rated Place is:" + highestRatedPlace);
+        model.addAttribute("place", highestRatedPlace);
+
+
+        return "suggestionpage";
+
     }
     
 }

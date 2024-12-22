@@ -16,6 +16,7 @@
 
         <h2>Welcome! </h2>
         <h2 th:text="${sessionName}">Welcome! </h2>
+        <a class="btn btn-primary" th:href="@{/apikey/redis}">Read from Redis</a>
       
         <p>Result:</p>
         <p th:text="${googleReply}">Response from google</p>

@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotEmpty;
 public class SessionData {
     
 
+    //BASIC VALIDATION
     @NotEmpty(message="Please input a name! Even a fake one is fine :(")
     private String fullName;
 

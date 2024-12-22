@@ -147,6 +147,19 @@ public class PlaceService {
     }
 
 
+    public Place highestRatedPlace(List<Place> listOfPlaces){
+        Place highestRatedPlace = new Place();
+
+        for(Place p : listOfPlaces){
+            if(p.getRating() > highestRatedPlace.getRating()){
+                highestRatedPlace = p;
+            }
+        }
+        return highestRatedPlace;
+
+    }
+
+
 
 
     

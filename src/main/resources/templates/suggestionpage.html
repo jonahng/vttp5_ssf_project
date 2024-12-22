@@ -20,48 +20,43 @@
 
         <div class="container">
           <br>
-          <h1>LIST OF PLACES Received from google, put into redis, and read from redis</h1>
+          <h1>Suggested Place</h1>
           <br><br>
           <a class="btn btn-primary" th:href="@{/sessions}">Create New</a>
           <a class="btn btn-primary" th:href="@{/sessions/clear}">logout session</a>
-          <a class="btn btn-primary" th:href="@{/suggestion}">Suggestion</a>
+          <a class="btn btn-primary" th:href="@{/apikey/redis}">Page of places from Redis</a>
           <br/><br/>
-          <table class="table table-striped">
-              <thead>
-                  <tr>
-                      <th>Name</th>
-                      <th>id</th>
-                      <th>address</th>
-                      <th>Google Maps URL</th>
-                      <th>Price Level</th>
-                      <th>Lower Price Range</th>
-                      <th>Upper Price Range</th>
-                      
-                  </tr>
-              </thead>
-              <tbody>
-                  <tr th:each="p, state: ${allPlaces}">
-                      <div th:if="${state.size gt 0}">
-                          <td th:utext="${p.displayName}"></td>
+
+
+          
+                        <!--   <td th:utext="${p.displayName}"></td>
                           <td th:utext="${p.id}"></td>
                           <td th:utext="${p.address}"></td>
                           <td th:utext="${p.googleMapsUrl}"></td>
                           <td th:utext="${p.priceLevel}"></td>
                           <td th:utext="${p.lowerPriceRange}"></td>
                           <td th:utext="${p.upperPriceRange}"></td>
-                          <td><a class="btn btn-primary" th:href="@{${p.googleMapsUrl}}" target="_blank">Visit on Google Maps</a>
+ -->
 
-
-
-                      </div>
-                      <div th:if="${state.size le 0}">
-                          No record found
-                      </div>
-                  </tr>
-              </tbody>
-          </table>
           <br><br>
+          <h5>Suggested Place: </h5>
+            <p th:text="${place.displayName}">Original Currency</p>
 
+            <div th:text="${place.id}">Final CUrrency</div>
+
+            <p th:text="${place.address}">Amount to Convert</p>
+
+
+            <p th:text="${place.googleMapsUrl}">Amount in final currency</p>
+           
+
+            <p th:text="${place.priceLevel}">conversion rate?</p>
+
+            <p th:text="${place.lowerPriceRange}">conversion rate?</p>
+
+            <p th:text="${place.upperPriceRange}">conversion rate?</p>
+
+      
           <br/><br/>
       </div>
 
