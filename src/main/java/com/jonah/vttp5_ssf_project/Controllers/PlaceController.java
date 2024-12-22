@@ -37,8 +37,22 @@ public class PlaceController {
         System.out.println("HTTP SESSION Session" + httpSesssion.getAttribute("session"));
 
         String googleReply = placeService.tryPlaceApi(sessionName);
+
+        model.addAttribute("sessionName", sessionName);
         model.addAttribute("googleReply", googleReply);
         return "embedmap";
+    }
+
+
+    @GetMapping("/apikey/redis")
+    public String readFromRedis(HttpSession httpSession, Model model){
+        String sessionName = httpSession.getAttribute("fullName").toString();
+        model.addAttribute("sessionName", sessionName);
+
+        String redisData = placeService.readFromRedis(sessionName, sessionName);
+        placeService.parsePlaceObjects(redisData);
+
+        return "redisData";
     }
     
 }

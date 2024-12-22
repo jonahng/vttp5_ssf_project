@@ -2,6 +2,8 @@ package com.jonah.vttp5_ssf_project.Services;
 
 import java.io.InputStream;
 import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,9 +18,11 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import com.jonah.vttp5_ssf_project.Constants.Constants;
+import com.jonah.vttp5_ssf_project.Models.Place;
 import com.jonah.vttp5_ssf_project.Repos.MapRepo;
 
 import jakarta.json.Json;
+import jakarta.json.JsonArray;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonReader;
 
@@ -84,6 +88,26 @@ public class PlaceService {
     public void addToRedis(String redisKey, String hashKey, String hashValue){
         maprepo.create(redisKey, hashKey, hashValue);
         System.out.println("added to redis, redisKey, hashkey:" + redisKey +  hashKey);
+    }
+
+
+
+    public String readFromRedis(String redisKey, String hashKey){
+        String redisData = maprepo.get(redisKey, hashKey).toString();
+        return redisData;
+    }
+
+    public void parsePlaceObjects(String redisData){
+        List<Place> allPlaces = new ArrayList<>();
+        JsonReader jsonReader = Json.createReader(new StringReader(redisData));
+        JsonObject entireJsonObject = jsonReader.readObject();
+        JsonArray placesArray = entireJsonObject.getJsonArray("places");
+
+        for(Integer i = 0; i < placesArray.size(); i++){
+            JsonObject placeObject = placesArray.getJsonObject(i);
+            System.out.println("Reading Json place object from redisData string:" + placeObject.toString() + "\n");
+
+        }
     }
 
 
