@@ -3,6 +3,7 @@ package com.jonah.vttp5_ssf_project.Services;
 import java.io.InputStream;
 import java.io.StringReader;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -14,12 +15,17 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
+import com.jonah.vttp5_ssf_project.Constants.Constants;
+import com.jonah.vttp5_ssf_project.Repos.MapRepo;
+
 import jakarta.json.Json;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonReader;
 
 @Service
 public class PlaceService {
+    @Autowired
+    MapRepo maprepo;
 
     @Value("${apikey}")
     private String apikey;
@@ -32,7 +38,7 @@ public class PlaceService {
     }
 
 
-    public void tryPlaceApi(){
+    public String tryPlaceApi(String fullName){
         String url = "https://places.googleapis.com/v1/places:searchNearby";
         String requestBody = "{\n" + //
                         "  \"includedTypes\": [\n" + //
@@ -45,7 +51,7 @@ public class PlaceService {
                         "        \"latitude\": 1.38705,\n" + //
                         "        \"longitude\": 103.87023\n" + //
                         "      },\n" + //
-                        "      \"radius\": 2000\n" + //
+                        "      \"radius\": 1500\n" + //
                         "    }\n" + //
                         "  }\n" + //
                         "}";
@@ -63,9 +69,24 @@ public class PlaceService {
         HttpEntity<String> httpEntity = new HttpEntity<String>(jsonObject.toString(), headers);
         ResponseEntity<String> replyRawData = restTemplate.exchange(url, HttpMethod.POST, httpEntity, String.class);
         System.out.println("Trying to post to google and response:" + replyRawData.getBody());
+        String replyBody = replyRawData.getBody();
+
+
+        //change the constants.ObjectKey to http id, expire after 1 hour?
+        addToRedis(fullName,fullName, replyBody);
+        maprepo.oneHourExpire(fullName);
+
+        return replyBody;
         
 
     }
+
+    public void addToRedis(String redisKey, String hashKey, String hashValue){
+        maprepo.create(redisKey, hashKey, hashValue);
+        System.out.println("added to redis, redisKey, hashkey:" + redisKey +  hashKey);
+    }
+
+
 
 
     
