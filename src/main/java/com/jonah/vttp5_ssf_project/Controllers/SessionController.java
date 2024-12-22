@@ -75,7 +75,7 @@ public class SessionController {
         httpSession.invalidate();
         System.out.println("Session has been cleared");
 
-        return "redirect:/alltodo";
+        return "redirect:/sessions";
     }
     
     

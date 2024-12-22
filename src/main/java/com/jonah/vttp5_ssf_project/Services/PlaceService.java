@@ -60,13 +60,38 @@ public class PlaceService {
                         "  }\n" + //
                         "}";
 
+
+
+                        String requestBodyDistanceRanked = "{\n" + //
+                        "  \"includedTypes\": [\n" + //
+                        "    \"restaurant\"\n" + //
+                        "  ],\n" + //
+                        "  \"maxResultCount\": 30,\n" + //
+                        "  \"locationRestriction\": {\n" + //
+                        "    \"circle\": {\n" + //
+                        "      \"center\": {\n" + //
+                        "        \"latitude\": 1.38705,\n" + //
+                        "        \"longitude\": 103.87023\n" + //
+                        "      },\n" + //
+                        "      \"radius\": 1500\n" + //
+                        "    }\n" + //
+                        "  },\n" + //
+                        "  \"rankPreference\": \"DISTANCE\"\n" + //
+                        "}";
+
+
+
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.set("X-Goog-Api-Key", apikey); //REMOVE THE API KEY
         headers.set("X-Goog-FieldMask",
          "places.id,places.displayName,places.formattedAddress,places.rating,places.types,places.googleMapsUri,places.priceLevel,places.primaryType,places.editorialSummary,places.priceRange");
 
-        JsonReader jsonReader = Json.createReader(new StringReader(requestBody));
+
+
+        //CHANGE REQUEST HERE
+        JsonReader jsonReader = Json.createReader(new StringReader(requestBody)); //The requestbody affects the results
+
         JsonObject jsonObject = jsonReader.readObject();
         
         System.out.println("THE JSON OBJECT TO POST IS: " + jsonObject);

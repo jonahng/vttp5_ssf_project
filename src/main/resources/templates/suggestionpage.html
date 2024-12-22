@@ -28,16 +28,6 @@
           <br/><br/>
 
 
-          
-                        <!--   <td th:utext="${p.displayName}"></td>
-                          <td th:utext="${p.id}"></td>
-                          <td th:utext="${p.address}"></td>
-                          <td th:utext="${p.googleMapsUrl}"></td>
-                          <td th:utext="${p.priceLevel}"></td>
-                          <td th:utext="${p.lowerPriceRange}"></td>
-                          <td th:utext="${p.upperPriceRange}"></td>
- -->
-
           <br><br>
           <h5>Suggested Place: </h5>
             <p th:text="${place.displayName}">Original Currency</p>
@@ -48,6 +38,7 @@
 
 
             <p th:text="${place.googleMapsUrl}">Amount in final currency</p>
+            <a class="btn btn-primary" th:href="@{${place.googleMapsUrl}}" target="_blank">Open in Google Maps</a>
            
 
             <p th:text="${place.priceLevel}">conversion rate?</p>
