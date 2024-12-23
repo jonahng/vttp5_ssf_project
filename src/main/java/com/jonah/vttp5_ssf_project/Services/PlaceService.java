@@ -3,6 +3,8 @@ package com.jonah.vttp5_ssf_project.Services;
 import java.io.InputStream;
 import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +21,7 @@ import org.springframework.web.client.RestTemplate;
 
 import com.jonah.vttp5_ssf_project.Constants.Constants;
 import com.jonah.vttp5_ssf_project.Models.Place;
+import com.jonah.vttp5_ssf_project.Repos.ListRepo;
 import com.jonah.vttp5_ssf_project.Repos.MapRepo;
 
 import jakarta.json.Json;
@@ -30,6 +33,9 @@ import jakarta.json.JsonReader;
 public class PlaceService {
     @Autowired
     MapRepo maprepo;
+
+    @Autowired
+    ListRepo listRepo;
 
     @Value("${apikey}")
     private String apikey;
@@ -204,6 +210,147 @@ public class PlaceService {
     
         return listOfPlaces;
 
+    }   
+
+
+
+    public List<Place> removePlacesFromPlaceList(List<Place> listOfPlaces, List<String> idsToRemove){
+        List<Integer> indexesToRemove = new ArrayList<>();
+        for(Place p: listOfPlaces){
+            for(String removeId: idsToRemove){
+                if(removeId.equals(p.getId())){
+                    indexesToRemove.add(listOfPlaces.indexOf(p));
+                }
+            }
+        }
+        Comparator<Integer> comparator = Collections.reverseOrder();
+        Collections.sort(indexesToRemove, comparator);
+
+        System.out.println("the indexes to remove from the display list are: " + indexesToRemove);
+        for(Integer indexToRemove: indexesToRemove){
+            int i = indexToRemove;
+            listOfPlaces.remove(i);
+        }
+        return listOfPlaces;
+
     }
+
+
+
+
+    public void addIdToIgnoreList(String httpSessionName, String placeId){
+        String listObjectKey = httpSessionName + "indexList";
+        String placeToAddwithComma = placeId + ",";
+
+        if(!maprepo.keyExists(httpSessionName, listObjectKey)){
+            maprepo.create(httpSessionName, listObjectKey, placeToAddwithComma);
+        }else{
+            String existingString = getStringMapRepoForIds(httpSessionName);
+            String updatedString = existingString + placeToAddwithComma;
+            maprepo.delete(httpSessionName, listObjectKey);
+            maprepo.create(httpSessionName, listObjectKey, updatedString);
+        }
+        maprepo.oneHourExpire(httpSessionName);
+
+    }
+
+    public List<String> getListOfIdToIgnore(String httpSessionName){
+        String listObjectKey = httpSessionName + "indexList";
+        String oldList = maprepo.get(httpSessionName, listObjectKey).toString();
+        String[] indexStringarray = oldList.split(",");
+        List<String> listOfPlaceId = new ArrayList<>();
+        for(String id : indexStringarray){
+            listOfPlaceId.add(id);
+        }
+
+        System.out.println("in getlistofidtoignore, the list of place id is:" + listOfPlaceId);
+        return listOfPlaceId;
+        
+
+    }
+
+    public String getStringMapRepoForIds(String httpSessionName){
+        String listObjectKey = httpSessionName + "indexList";
+        String oldIdList = maprepo.get(httpSessionName, listObjectKey).toString();
+        return oldIdList;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    //Outdated Code;
+
+    public List<Place> removePlaceFromPlaceListUpdateIndexRepo(Place place, List<Place> listOfPlaces, String httpSessionName){
+        int indexToRemove = -1;
+        for(Place p: listOfPlaces){
+            if(place.getId().equals(p.getId()) ){
+                indexToRemove = listOfPlaces.indexOf(p);
+                System.out.println("the place removed is from the place list is" + indexToRemove);
+            }
+        }
+        if(indexToRemove > -1){
+            addToMapRepoForIndexes(httpSessionName, indexToRemove);
+            listOfPlaces.remove(indexToRemove);
+            
+        }
+        return listOfPlaces;
+
+    }
+
+
+    public void addToMapRepoForIndexes(String httpSessionName, int indexToAdd){
+        String listObjectKey = httpSessionName + "indexList";
+        String indexToAddString = indexToAdd + ",";
+
+        if(!maprepo.keyExists(httpSessionName, listObjectKey)){
+            maprepo.create(httpSessionName, listObjectKey, indexToAddString);
+        }else{
+            String existingString = getStringMapRepoForIndexes(httpSessionName);
+            String updatedString = existingString + indexToAddString;
+            maprepo.delete(httpSessionName, listObjectKey);
+            maprepo.create(httpSessionName, listObjectKey, updatedString);
+        }
+        maprepo.oneHourExpire(httpSessionName);
+
+    }
+
+
+    public List<Integer> getIntegerListMapRepoForIndexes(String httpSessionName){
+        String listObjectKey = httpSessionName + "indexList";
+        String oldIndexList = maprepo.get(httpSessionName, listObjectKey).toString();
+        String[] indexStringarray = oldIndexList.split(",");
+        List<Integer> integerListIndex = new ArrayList<>();
+        for(String index : indexStringarray){
+            integerListIndex.add(Integer.parseInt(index));
+        }
+        return integerListIndex;
+
+    }
+
+    public String getStringMapRepoForIndexes(String httpSessionName){
+        String listObjectKey = httpSessionName + "indexList";
+        String oldIndexList = maprepo.get(httpSessionName, listObjectKey).toString();
+        return oldIndexList;
+    }
+
+    
+
 
 }

@@ -1,5 +1,6 @@
 package com.jonah.vttp5_ssf_project.Controllers;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -115,11 +116,23 @@ public class PlaceController {
 
         String redisData = placeService.readFromRedis(sessionName, sessionName);
         List<Place> allPlaces = placeService.parsePlaceObjects(redisData);
+
+
+        placeService.addIdToIgnoreList(sessionName, place.getId()); 
+        List<Place> allPlacesMinusAllChecked = placeService.removePlacesFromPlaceList(allPlaces, placeService.getListOfIdToIgnore(sessionName));
+
+
         //model.addAttribute("allPlaces", allPlaces);
-        List<Place> allPlacesMinusPrevious = placeService.removePlaceFromPlaceList(place, allPlaces);
-        Place highestRatedPlace = placeService.highestRatedPlace(allPlacesMinusPrevious);
+        /* List<Place> allPlacesMinusPrevious = placeService.removePlaceFromPlaceListUpdateIndexRepo(place, allPlaces,sessionName);
+        List<Integer> listOfPlacesToRemove = placeService.getIntegerListMapRepoForIndexes(sessionName);
+        System.out.println("index of the places to remove is:" + listOfPlacesToRemove);
+        List<Place> allPlacesMinusAllChecked = allPlaces;
+        for(int i : listOfPlacesToRemove){
+            allPlaces.remove(i);
+        } */
 
 
+        Place highestRatedPlace = placeService.highestRatedPlace(allPlacesMinusAllChecked);//CHANGE THIS TO ALLPLACESMINUSALLCHECKED
 
         //get service to find new place,
         //add new place to model
