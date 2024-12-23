@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.jonah.vttp5_ssf_project.Models.Place;
@@ -28,16 +30,16 @@ public class PlaceController {
 
 
     @GetMapping("/apikey")
-    public String printapikey(HttpSession httpSesssion, Model model){
+    public String printapikey(HttpSession httpSession, Model model){
         placeService.printApiKey();
 
-        if(httpSesssion.getAttribute("session") ==null){
+        if(httpSession.getAttribute("session") ==null){
             System.out.println("user is not logged in yet!");
             return "redirect:/sessions";
         }
-        String sessionName = httpSesssion.getAttribute("fullName").toString();
+        String sessionName = httpSession.getAttribute("fullName").toString();
         System.out.println("fullName is : " + sessionName);
-        System.out.println("HTTP SESSION Session" + httpSesssion.getAttribute("session"));
+        System.out.println("HTTP SESSION Session" + httpSession.getAttribute("session"));
 
         String googleReply = placeService.tryPlaceApi(sessionName);
 
@@ -49,6 +51,12 @@ public class PlaceController {
 
     @GetMapping("/apikey/redis")
     public String readFromRedis(HttpSession httpSession, Model model){
+
+        if(httpSession.getAttribute("session") ==null){
+            System.out.println("user is not logged in yet!");
+            return "redirect:/sessions";
+        }
+
         String sessionName = httpSession.getAttribute("fullName").toString();
         model.addAttribute("sessionName", sessionName);
 
@@ -62,6 +70,12 @@ public class PlaceController {
 
     @GetMapping("/suggestion")
     public String suggestPlace(HttpSession httpSession, Model model){
+
+        if(httpSession.getAttribute("session") ==null){
+            System.out.println("user is not logged in yet!");
+            return "redirect:/sessions";
+        }
+
         String sessionName = httpSession.getAttribute("fullName").toString();
         model.addAttribute("sessionName", sessionName);
 
@@ -76,6 +90,42 @@ public class PlaceController {
 
         return "suggestionpage";
 
+    }
+
+    @GetMapping("/suggestion/anything")
+    public void suggestAnythingElse(HttpSession httpSession, Model model){
+        
+    }
+
+
+    @PostMapping("/suggestion")
+    public String postSuggestion(@ModelAttribute("place") Place place, HttpSession httpSession, Model model){
+
+        if(httpSession.getAttribute("session") ==null){
+            System.out.println("user is not logged in yet!");
+            return "redirect:/sessions";
+        }
+        String sessionName = httpSession.getAttribute("fullName").toString();
+        model.addAttribute("sessionName", sessionName);
+        System.out.println("the current http session is:" + sessionName);
+        
+
+        System.out.println("post place received: " + place);
+
+
+        String redisData = placeService.readFromRedis(sessionName, sessionName);
+        List<Place> allPlaces = placeService.parsePlaceObjects(redisData);
+        //model.addAttribute("allPlaces", allPlaces);
+        List<Place> allPlacesMinusPrevious = placeService.removePlaceFromPlaceList(place, allPlaces);
+        Place highestRatedPlace = placeService.highestRatedPlace(allPlacesMinusPrevious);
+
+
+
+        //get service to find new place,
+        //add new place to model
+        //return the suggestionpage with the new place in the mode, not redirect!
+        model.addAttribute("place", highestRatedPlace);
+        return "suggestionpage";
     }
     
 }

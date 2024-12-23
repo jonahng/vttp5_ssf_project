@@ -167,7 +167,7 @@ public class PlaceService {
             allPlaces.add(place);
             //System.out.println("the place object generated from reading redis:" + place.toString() + "\n");
         }
-        System.out.println("all places objects read from redis:" + allPlaces);
+        //System.out.println("all places objects read from redis:" + allPlaces);
         return allPlaces;
     }
 
@@ -181,11 +181,29 @@ public class PlaceService {
             }
         }
         return highestRatedPlace;
-
     }
 
 
+    public void suggestDifferentPlace(String fullName, Place checkedPlace){
+        Place suggestedPlace = new Place();
+        
+    }
 
 
+    public List<Place> removePlaceFromPlaceList(Place place, List<Place> listOfPlaces){
+        int indexToRemove = -1;
+        for(Place p: listOfPlaces){
+            if(place.getId().equals(p.getId()) ){
+                indexToRemove = listOfPlaces.indexOf(p);
+                System.out.println("the place removed is from the place list is" + indexToRemove);
+            }
+        }
+        if(indexToRemove > -1){
+            listOfPlaces.remove(indexToRemove);
+        }
     
+        return listOfPlaces;
+
+    }
+
 }

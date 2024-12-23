@@ -19,16 +19,16 @@
 
 
         <div class="container">
-          <br>
+          
           <h1>Suggested Place</h1>
-          <br><br>
+          <br>
           <a class="btn btn-primary" th:href="@{/sessions}">Create New</a>
           <a class="btn btn-primary" th:href="@{/sessions/clear}">logout session</a>
           <a class="btn btn-primary" th:href="@{/apikey/redis}">Page of places from Redis</a>
-          <br/><br/>
+          
 
 
-          <br><br>
+          <br>
           <h5>Suggested Place: </h5>
             <p th:text="${place.displayName}">Original Currency</p>
 
@@ -47,10 +47,23 @@
 
             <p th:text="${place.upperPriceRange}">conversion rate?</p>
 
-      
-          <br/><br/>
+            <a class="btn btn-primary" th:href="@{/sessions/clear}">Too Expensive</a>
+            <a class="btn btn-primary" th:href="@{/suggestion/anything}">Suggest Anything Else!</a>
+          <br/>
+          
+
       </div>
 
+      <form method="post" th:action="@{/suggestion}" th:object="${place}">
+
+        <div class="mb-3">
+          <label class="form-label">ID</label>
+          <input type="text" class="form-control" name="id" th:field="*{id}" placeholder="id">
+      </div>
+
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+      
 
 
         

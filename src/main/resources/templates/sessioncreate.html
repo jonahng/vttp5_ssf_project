@@ -13,12 +13,13 @@
 <body>
     <div class="container">
         <br>
-        <h3>Create Session Data</h3>
+        <h3>Login Please!</h3>
+        <p>Your earlier session may have timed out</p>
         <br><br>
         <form method="post" th:action="@{/sessions}" th:object="${session}">
             <div class="mb-3">
-                <label class="form-label">Full Name</label>
-                <input type="text" class="form-control" name="fullName" th:field="*{fullName}" placeholder="Full Name">
+                <label class="form-label"> Full Name</label>
+                <input type="text" class="form-control" name="fullName" th:field="*{fullName}" placeholder="Write your name here please">
             </div>
             <div class="alert alert-danger" th:if="${#fields.hasErrors('fullName')}" th:errors="*{fullName}"></div>
 
