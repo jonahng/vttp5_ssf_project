@@ -47,6 +47,10 @@ public class PlaceService {
         System.out.println("the api key is currently: " + apikey);
     }
 
+    public String getApiKey(){
+        return apikey;
+    }
+
 
     public String tryPlaceApi(String fullName){
         String url = "https://places.googleapis.com/v1/places:searchNearby";

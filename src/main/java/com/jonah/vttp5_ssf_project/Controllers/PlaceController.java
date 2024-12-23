@@ -6,11 +6,14 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.jonah.vttp5_ssf_project.Models.Location;
 import com.jonah.vttp5_ssf_project.Models.Place;
 import com.jonah.vttp5_ssf_project.Services.PlaceService;
 
@@ -28,6 +31,30 @@ public class PlaceController {
 
         return "index";
     }
+
+
+
+
+    @GetMapping("/location")
+    public String getLocationSelection(HttpSession httpSession, Model model){
+        model.addAttribute("apikey", placeService.getApiKey()); //REWRITE CODE SO API KEY DOES NOT GO TO HTML!
+        model.addAttribute("lat", 0);
+        model.addAttribute("lon", 0);
+        Location location = new Location();
+        model.addAttribute("location", location);
+        return "locationselection";
+    }
+
+    @PostMapping("/location")
+    public String postLocationSelection(@RequestBody MultiValueMap<String, String> formEntity, HttpSession httpSession, Model model){
+        System.out.println("received post from location form:" + formEntity);
+
+        return "redirect:/location"; //CHANGE THIS TO REDIRECT TO REDIS PAGE?
+    }
+
+
+
+
 
 
     @GetMapping("/apikey")
