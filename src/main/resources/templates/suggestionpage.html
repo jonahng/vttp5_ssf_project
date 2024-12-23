@@ -12,39 +12,41 @@
   <body>
     <main>
         <h2>Welcome!</h2>
-        <h2 th:text="${sessionName}">Welcome! </h2>
+        <h2 th:text="${sessionName}">User! </h2>
       
 
 
         <div class="container">
+          <a class="btn btn-danger" th:href="@{/sessions/clear}">Logout session</a>
+          <a class="btn btn-primary" th:href="@{/apikey/redis}">Page of Places Stored in Redis</a>
+          <h5>Suggested Place</h5>
           
-          <h1>Suggested Place</h1>
+
           
-          <a class="btn btn-primary" th:href="@{/sessions}">Create New</a>
-          <a class="btn btn-primary" th:href="@{/sessions/clear}">logout session</a>
-          <a class="btn btn-primary" th:href="@{/apikey/redis}">Page of places from Redis</a>
           
-            <p th:text="${place.displayName}">Original Currency</p>
+            <h3 th:text="${place.displayName}">place name</h3>
 
-            <div th:text="${place.id}">Final CUrrency</div>
+           <!--  <div th:text="${place.id}">Final CUrrency</div> -->
 
-            <p th:text="${place.address}">Amount to Convert</p>
+            <p th:text="${place.address}">place address</p>
 
-            <p th:text="${place.rating}">Amount to Convert</p>
+            <p th:text="${place.rating}">place rating</p>
 
 
-            <p th:text="${place.googleMapsUrl}">Amount in final currency</p>
-            <a class="btn btn-primary" th:href="@{${place.googleMapsUrl}}" target="_blank">Open in Google Maps</a>
+            <!-- <p th:text="${place.googleMapsUrl}">Amount in final currency</p> -->
+            
            
 
-            <p th:text="${place.priceLevel}">conversion rate?</p>
+            <p th:text="${place.priceLevel}">price level, low moderate high</p>
 
-            <p th:text="${place.lowerPriceRange}">conversion rate?</p>
+            <p th:text="${place.lowerPriceRange}">lower range of price, in sgd</p>
 
-            <p th:text="${place.upperPriceRange}">conversion rate?</p>
+            <p th:text="${place.upperPriceRange}">upper range of price, in sgd</p>
 
-            <a class="btn btn-primary" th:href="@{/sessions/clear}">Too Expensive</a>
-            <a class="btn btn-primary" th:href="@{/suggestion/anything}">Suggest Anything Else!</a>
+            <a class="btn btn-success" th:href="@{${place.googleMapsUrl}}" target="_blank">Open in Google Maps</a>
+
+            <!-- <a class="btn btn-primary" th:href="@{/sessions/clear}">Too Expensive</a> -->
+            <!-- <a class="btn btn-primary" th:href="@{/suggestion/anything}">Suggest Anything Else!</a> -->
           <br/>
           
 
@@ -52,12 +54,21 @@
 
       <form method="post" th:action="@{/suggestion}" th:object="${place}">
         <div class="mb-3">
-          <label class="form-label">ID</label>
           <input type="text" class="form-control" name="id" th:field="*{id}" placeholder="id">
       </div>
 
         <button type="submit" class="btn btn-primary">Suggest Anything Else!</button>
     </form>
+
+    <form method="post" th:action="@{/suggestion}" th:object="${place}">
+      <div class="mb-3">
+        
+        <input type="text" class="form-control" name="id" th:field="*{id}" placeholder="id">
+    </div>
+      <button type="submit" class="btn btn-primary">Too Expensive!</button>
+    </form>
+
+    
       
 
 
