@@ -52,7 +52,8 @@ public class PlaceService {
     }
 
 
-    public String tryPlaceApi(String fullName){
+    public String tryPlaceApi(String fullName, double longitude, double latitude){
+
         String url = "https://places.googleapis.com/v1/places:searchNearby";
         String requestBody = "{\n" + //
                         "  \"includedTypes\": [\n" + //
@@ -62,8 +63,8 @@ public class PlaceService {
                         "  \"locationRestriction\": {\n" + //
                         "    \"circle\": {\n" + //
                         "      \"center\": {\n" + //
-                        "        \"latitude\": 1.38705,\n" + //
-                        "        \"longitude\": 103.87023\n" + //
+                        "        \"latitude\": " + latitude + ",\n" + //
+                        "        \"longitude\": " + longitude + "\n" + //
                         "      },\n" + //
                         "      \"radius\": 1500\n" + //
                         "    }\n" + //

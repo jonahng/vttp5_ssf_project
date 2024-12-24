@@ -66,7 +66,7 @@ public class SessionController {
         httpSession.setAttribute("fullName", entity.getFullName());
 
         model.addAttribute("sessions", sessions);
-        return "redirect:/apikey";
+        return "redirect:/location";
     }
     
     @GetMapping("/clear")

@@ -29,7 +29,7 @@ public class PlaceController {
     @GetMapping("")
     public String homePage(Model model){
 
-        return "index";
+        return "redirect:/sessions";
     }
 
 
@@ -49,7 +49,11 @@ public class PlaceController {
     public String postLocationSelection(@RequestBody MultiValueMap<String, String> formEntity, HttpSession httpSession, Model model){
         System.out.println("received post from location form:" + formEntity);
 
-        return "redirect:/location"; //CHANGE THIS TO REDIRECT TO REDIS PAGE?
+        httpSession.setAttribute("longitude", Double.parseDouble(formEntity.getFirst("cityLng")));
+        httpSession.setAttribute("latitude", Double.parseDouble(formEntity.getFirst("cityLat")));
+        //placeService.tryPlaceApi(httpSession.getAttribute("fullName").toString(), Double.parseDouble(formEntity.getFirst("cityLng")), Double.parseDouble(formEntity.getFirst("cityLat")));
+
+        return "redirect:/apikey"; //CHANGE THIS TO REDIRECT TO REDIS PAGE?
     }
 
 
@@ -69,7 +73,7 @@ public class PlaceController {
         System.out.println("fullName is : " + sessionName);
         System.out.println("HTTP SESSION Session" + httpSession.getAttribute("session"));
 
-        String googleReply = placeService.tryPlaceApi(sessionName);
+        String googleReply = placeService.tryPlaceApi(sessionName, Double.parseDouble(httpSession.getAttribute("longitude").toString()), Double.parseDouble(httpSession.getAttribute("latitude").toString()));
 
         model.addAttribute("sessionName", sessionName);
         model.addAttribute("googleReply", googleReply);
