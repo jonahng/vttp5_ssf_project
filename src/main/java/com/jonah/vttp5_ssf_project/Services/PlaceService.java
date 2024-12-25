@@ -55,6 +55,10 @@ public class PlaceService {
     public String tryPlaceApi(String fullName, double longitude, double latitude){
 
         String url = "https://places.googleapis.com/v1/places:searchNearby";
+
+
+
+        //THIS requestBody could also be made using a JsonBuilder.
         String requestBody = "{\n" + //
                         "  \"includedTypes\": [\n" + //
                         "    \"restaurant\"\n" + //

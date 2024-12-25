@@ -2,6 +2,7 @@ package com.jonah.vttp5_ssf_project.Controllers;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -9,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -99,6 +101,27 @@ public class PlaceController {
 
         return "redisData";
     }
+
+
+    //THIS PATHVARIABLE ALLOWS ADMIN TO READ THE REDIS DATABASE FOR ANY GIVEN USER SESSION
+    @GetMapping("/apikey/redis/{sessionName}")
+    public String readFromRedisSpecificUser(@PathVariable Map<String, String> pathMap, Model model){
+
+        String sessionName = pathMap.get("sessionName");
+        model.addAttribute("sessionName", sessionName);
+        String redisData = placeService.readFromRedis(sessionName, sessionName);
+        List<Place> allPlaces = placeService.parsePlaceObjects(redisData);
+        model.addAttribute("allPlaces", allPlaces);
+        System.out.println("\n Highest Rated Place is:" + placeService.highestRatedPlace(allPlaces));
+
+        return "redisData";
+    }
+
+
+
+
+
+
 
     @GetMapping("/suggestion")
     public String suggestPlace(HttpSession httpSession, Model model){
