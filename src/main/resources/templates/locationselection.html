@@ -8,13 +8,16 @@
           var autocomplete = new google.maps.places.Autocomplete(input);
             google.maps.event.addListener(autocomplete, 'place_changed', function () {
                 var place = autocomplete.getPlace();
-                document.getElementById('city2').value = place.name;
-                document.getElementById('cityLat').value = place.geometry.location.lat();
-                document.getElementById('cityLng').value = place.geometry.location.lng();
+
+
+                document.getElementById('placeName').value = place.name;
+                document.getElementById('placeLat').value = place.geometry.location.lat();
+                document.getElementById('placeLong').value = place.geometry.location.lng();
             });
         }
         google.maps.event.addDomListener(window, 'load', initialize);
     </script>
+
 
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -41,9 +44,9 @@
 <form method="post" th:action="@{/location}" enctype="application/x-www-form-urlencoded">
 
     <input id="searchTextField" type="text" size="60" placeholder="Enter a location to search" autocomplete="on" runat="server" />  
-    <input type="hidden" id="city2" name="city2" />
-    <input type="hidden" id="cityLat" name="cityLat" />
-    <input type="hidden" id="cityLng" name="cityLng" />
+    <input type="hidden" id="placeName" name="placeName" />
+    <input type="hidden" id="placeLat" name="placeLat" />
+    <input type="hidden" id="placeLong" name="placeLong" />
 
 <button type="submit" class="btn btn-primary">Confirm location!</button>
 </form>

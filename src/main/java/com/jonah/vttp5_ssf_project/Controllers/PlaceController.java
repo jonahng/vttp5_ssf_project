@@ -53,7 +53,7 @@ public class PlaceController {
     @PostMapping("/location")
     public String postLocationSelection(@RequestBody MultiValueMap<String, String> formEntity, HttpSession httpSession, Model model){
         try {
-            if(formEntity.getFirst("cityLng")==""){
+            if(formEntity.getFirst("placeLong")==""){
                 return "redirect:/location";
             }
         } catch (Exception e) {
@@ -62,8 +62,8 @@ public class PlaceController {
 
         System.out.println("received post from location form:" + formEntity);
 
-        httpSession.setAttribute("longitude", Double.parseDouble(formEntity.getFirst("cityLng")));
-        httpSession.setAttribute("latitude", Double.parseDouble(formEntity.getFirst("cityLat")));
+        httpSession.setAttribute("longitude", Double.parseDouble(formEntity.getFirst("placeLong")));
+        httpSession.setAttribute("latitude", Double.parseDouble(formEntity.getFirst("placeLat")));
         //placeService.tryPlaceApi(httpSession.getAttribute("fullName").toString(), Double.parseDouble(formEntity.getFirst("cityLng")), Double.parseDouble(formEntity.getFirst("cityLat")));
 
         return "redirect:/apikey"; //CHANGE THIS TO REDIRECT TO REDIS PAGE?
