@@ -17,10 +17,21 @@
         </div>
       
 
+          
+        <div class="parent-container d-flex">
+          <div class="container">
+            <div class="row">
+                <div class="col-xl-12">
+    
+                </div>
+            </div>
 
-        <div class="container">
+
+
+        <div class="container" style="border: 3px solid  #039233;">
          
-          <h5>Hey <span th:text="${sessionName}"></span>, how about?</h5>
+          <h4>Hey <span th:text="${sessionName}"></span>, how about?</h4>
+          <br>
           
 
           
@@ -39,6 +50,7 @@
             <a class="btn btn-success" th:href="@{${place.googleMapsUrl}}" target="_blank">Open in Google Maps</a>
 
             <a class="btn btn-primary" th:href="@{/suggestion/anything}">Add to shortlist!</a>
+            <br>
           <br/>
           
 
@@ -46,7 +58,7 @@
 
       <form method="post" th:action="@{/suggestion}" th:object="${place}">
         <div class="mb-3">
-          <input type="text" class="form-control" name="id" th:field="*{id}" placeholder="id">
+          <input type="hidden" class="form-control" name="id" th:field="*{id}" placeholder="id">
       </div>
 
         <button type="submit" class="btn btn-primary">Suggest Anything Else!</button>
@@ -54,16 +66,19 @@
 
     <form method="post" th:action="@{/suggestion}" th:object="${place}">
       <div class="mb-3">
-        
-        <input type="text" class="form-control" name="id" th:field="*{id}" placeholder="id">
+        <input type="hidden" class="form-control" name="id" th:field="*{id}" placeholder="id">
     </div>
-      <button type="submit" class="btn btn-primary">Narrow it down!</button>
+      <button type="hidden" class="btn btn-primary">Narrow it down!</button>
     </form>
     <br>
+
+
+  
     <a class="btn btn-danger" th:href="@{/sessions/clear}">Logout session</a>
     <a class="btn btn-primary" th:href="@{/apikey/redis}">Page of Places Stored in Redis</a>
     <a class="btn btn-primary" th:href="@{/apikey/redis}">Behind the scenes</a>
 
+  </div>
     
       
 
