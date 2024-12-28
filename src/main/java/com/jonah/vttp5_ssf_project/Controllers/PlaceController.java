@@ -39,6 +39,7 @@ public class PlaceController {
 
     @GetMapping("/location")
     public String getLocationSelection(HttpSession httpSession, Model model){
+        model.addAttribute("sessionName", httpSession.getAttribute("fullName"));
         model.addAttribute("apikey", placeService.getApiKey()); //REWRITE CODE SO API KEY DOES NOT GO TO HTML!
         model.addAttribute("lat", 0);
         model.addAttribute("lon", 0);
@@ -49,6 +50,14 @@ public class PlaceController {
 
     @PostMapping("/location")
     public String postLocationSelection(@RequestBody MultiValueMap<String, String> formEntity, HttpSession httpSession, Model model){
+        try {
+            if(formEntity.getFirst("cityLng")==""){
+                return "redirect:/location";
+            }
+        } catch (Exception e) {
+            // TODO: handle exception
+        }
+
         System.out.println("received post from location form:" + formEntity);
 
         httpSession.setAttribute("longitude", Double.parseDouble(formEntity.getFirst("cityLng")));
