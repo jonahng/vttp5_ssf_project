@@ -65,6 +65,10 @@ public class SessionController {
         httpSession.setAttribute("session", sessions);
         httpSession.setAttribute("fullName", entity.getFullName());
 
+        String shortList = "";
+        httpSession.setAttribute("shortList", shortList);
+       
+
         model.addAttribute("sessions", sessions);
         return "redirect:/location";
     }

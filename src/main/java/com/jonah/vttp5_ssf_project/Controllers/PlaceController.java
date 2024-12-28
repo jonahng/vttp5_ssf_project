@@ -1,6 +1,7 @@
 package com.jonah.vttp5_ssf_project.Controllers;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -191,10 +192,6 @@ public class PlaceController {
 
     }
 
-    @GetMapping("/suggestion/anything")
-    public void suggestAnythingElse(HttpSession httpSession, Model model){
-        
-    }
 
 
     @PostMapping("/suggestion")
@@ -238,5 +235,20 @@ public class PlaceController {
         model.addAttribute("place", highestRatedPlace);
         return "suggestionpage";
     }
-    
+
+
+
+    @PostMapping("/suggestion/shortlist")
+    public String postShortlist(@ModelAttribute("place") Place place, HttpSession httpSession, Model model){
+        String oldShortList = httpSession.getAttribute("shortList").toString();
+        String updatedShortList = oldShortList + place.getId().toString();
+
+        httpSession.setAttribute("shortList", updatedShortList);
+        //get the short list, which should have been initialised as empty list of place
+        //add new place to list of places
+        //set shortlist to updated list
+        
+        System.out.println("the updated shortlist is:" + updatedShortList);
+        return "redirect:/suggestion";
+    }
 }
