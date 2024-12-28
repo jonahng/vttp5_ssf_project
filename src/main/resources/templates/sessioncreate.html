@@ -12,21 +12,28 @@
 
 <body>
     <div class="container">
+        <div class="d-flex justify-content-center"></div>
         <br>
-        <h3>Login Please!</h3>
-        <p>Your earlier session may have timed out</p>
-        <br><br>
+        <h3>Welcome!</h3>
+        
+        <p>You can login using your name</p>
+        
         <form method="post" th:action="@{/sessions}" th:object="${session}" enctype="application/x-www-form-urlencoded">
             <div class="mb-3">
-                <label class="form-label"> Full Name</label>
+                
+                <label class="form-label"></label>
                 <input type="text" class="form-control" name="fullName" th:field="*{fullName}" placeholder="Write your name here please">
+           
             </div>
             <div class="alert alert-danger" th:if="${#fields.hasErrors('fullName')}" th:errors="*{fullName}"></div>
 
 
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <button type="submit" class="btn btn-success">Login!</button>
         </form>
     </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
 
 </html>

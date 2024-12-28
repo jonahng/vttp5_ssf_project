@@ -119,10 +119,6 @@ public class PlaceController {
 
 
 
-
-
-
-
     @GetMapping("/suggestion")
     public String suggestPlace(HttpSession httpSession, Model model){
 

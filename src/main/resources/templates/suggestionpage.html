@@ -11,41 +11,33 @@
   </head>
   <body>
     <main>
-        <h2>Welcome!</h2>
-        <h2 th:text="${sessionName}">User! </h2>
+
+        <div class="d-flex justify-content-center">
+        <h2>Welcome! <span th:text="${sessionName}"> </span></h2>
+        </div>
       
 
 
         <div class="container">
-          <a class="btn btn-danger" th:href="@{/sessions/clear}">Logout session</a>
-          <a class="btn btn-primary" th:href="@{/apikey/redis}">Page of Places Stored in Redis</a>
-          <h5>Suggested Place</h5>
+         
+          <h5>Hey <span th:text="${sessionName}"></span>, how about?</h5>
           
 
           
           
             <h3 th:text="${place.displayName}">place name</h3>
 
-           <!--  <div th:text="${place.id}">Final CUrrency</div> -->
-
             <p th:text="${place.address}">place address</p>
 
-            <p th:text="${place.rating}">place rating</p>
+            <p>Rating: <span th:text="${place.rating}"></span><span> Stars</span></p>
 
+            <p>Price Level: <span th:text="${place.priceLevel}"></span></p>
 
-            <!-- <p th:text="${place.googleMapsUrl}">Amount in final currency</p> -->
-            
-           
+            <p>Price Range: <span th:text="${place.lowerPriceRange}"></span><span> to </span> <span th:text="${place.upperPriceRange}"></span> <span>SGD</span></p>
 
-            <p th:text="${place.priceLevel}">price level, low moderate high</p>
-
-            <p th:text="${place.lowerPriceRange}">lower range of price, in sgd</p>
-
-            <p th:text="${place.upperPriceRange}">upper range of price, in sgd</p>
 
             <a class="btn btn-success" th:href="@{${place.googleMapsUrl}}" target="_blank">Open in Google Maps</a>
 
-            <!-- <a class="btn btn-primary" th:href="@{/sessions/clear}">Too Expensive</a> -->
             <a class="btn btn-primary" th:href="@{/suggestion/anything}">Add to shortlist!</a>
           <br/>
           
@@ -67,6 +59,10 @@
     </div>
       <button type="submit" class="btn btn-primary">Narrow it down!</button>
     </form>
+    <br>
+    <a class="btn btn-danger" th:href="@{/sessions/clear}">Logout session</a>
+    <a class="btn btn-primary" th:href="@{/apikey/redis}">Page of Places Stored in Redis</a>
+    <a class="btn btn-primary" th:href="@{/apikey/redis}">Behind the scenes</a>
 
     
       

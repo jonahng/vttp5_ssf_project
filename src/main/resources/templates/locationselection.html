@@ -17,16 +17,18 @@
     </script>
 </head>
 <body>
+
 <form method="post" th:action="@{/location}" enctype="application/x-www-form-urlencoded">
 
-
-    <input id="searchTextField" type="text" size="50" placeholder="Enter a location" autocomplete="on" runat="server" />  
+    <input id="searchTextField" type="text" size="50" placeholder="Enter a location to search" autocomplete="on" runat="server" />  
     <input type="hidden" id="city2" name="city2" />
     <input type="hidden" id="cityLat" name="cityLat" />
     <input type="hidden" id="cityLng" name="cityLng" />
 
 <button type="submit" class="btn btn-primary">Confirm location!</button>
+
 </form>
+
 
 </body>
 </html>

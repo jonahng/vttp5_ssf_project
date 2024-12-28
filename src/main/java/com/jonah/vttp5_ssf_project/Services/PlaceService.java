@@ -70,7 +70,7 @@ public class PlaceService {
                         "        \"latitude\": " + latitude + ",\n" + //
                         "        \"longitude\": " + longitude + "\n" + //
                         "      },\n" + //
-                        "      \"radius\": 1500\n" + //
+                        "      \"radius\": 1000\n" + //
                         "    }\n" + //
                         "  }\n" + //
                         "}";
@@ -85,8 +85,8 @@ public class PlaceService {
                         "  \"locationRestriction\": {\n" + //
                         "    \"circle\": {\n" + //
                         "      \"center\": {\n" + //
-                        "        \"latitude\": 1.38705,\n" + //
-                        "        \"longitude\": 103.87023\n" + //
+                        "        \"latitude\": " + latitude + ",\n" + //
+                        "        \"longitude\": " + longitude + "\n" + //
                         "      },\n" + //
                         "      \"radius\": 1500\n" + //
                         "    }\n" + //
