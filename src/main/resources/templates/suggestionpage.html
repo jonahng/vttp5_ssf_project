@@ -13,14 +13,14 @@
     <main>
 
         <div class="d-flex justify-content-center">
-        <h2>Welcome! <span th:text="${sessionName}"> </span></h2>
+        <h2>&#128161 Suggestions For  <span th:text="${sessionName}"> </span></h2>
         </div>
       
 
           
 
 
-
+        <br>
         <div class="parent-container d-flex">
           <div class="container">
             <div class="row">
@@ -50,31 +50,36 @@
             <p>Price Range: <span th:text="${place.lowerPriceRange}"></span><span> to </span> <span th:text="${place.upperPriceRange}"></span> <span>SGD</span></p>
 
 
-            <a class="btn btn-success" th:href="@{${place.googleMapsUrl}}" target="_blank">Open in Google Maps</a>
+            <a class="btn btn-primary" th:href="@{${place.googleMapsUrl}}" target="_blank">Open in Google Maps</a>
             <br>
           <br/>
           
 
       </div>
+      <br>
+
+      <form method="post" th:action="@{/suggestion/shortlist}" th:object="${place}">
+        <div class="mb-3">
+          <input type="hidden" class="form-control" name="id" th:field="*{id}" placeholder="id">
+          <input type="hidden" class="form-control" name="displayName" th:field="*{displayName}" placeholder="displayName">
+          <input type="hidden" class="form-control" name="googleMapsUrl" th:field="*{googleMapsUrl}" placeholder="googleMapsUrl">
+      </div>
+  
+        <button type="submit" class="btn btn-success">Keep In My ShortList! Show Next Suggestion</button>
+    </form>
 
       <form method="post" th:action="@{/suggestion}" th:object="${place}">
         <div class="mb-3">
           <input type="hidden" class="form-control" name="id" th:field="*{id}" placeholder="id">
       </div>
 
-        <button type="submit" class="btn btn-primary">Suggest Anything Else!</button>
+        <button type="submit" class="btn btn-warning">Suggest Anything Else!</button>
     </form>
 
-    <form method="post" th:action="@{/suggestion/shortlist}" th:object="${place}">
-      <div class="mb-3">
-        <input type="hidden" class="form-control" name="id" th:field="*{id}" placeholder="id">
-        <input type="hidden" class="form-control" name="displayName" th:field="*{displayName}" placeholder="displayName">
-        <input type="hidden" class="form-control" name="googleMapsUrl" th:field="*{googleMapsUrl}" placeholder="googleMapsUrl">
-    </div>
-
-      <button type="submit" class="btn btn-primary">Keep in shortlist and show next suggestion</button>
-  </form>
+   
   
+    <br>
+    <br>
     <br>
     <br>
     <a class="btn btn-danger" th:href="@{/sessions/clear}">Logout session</a>
@@ -85,7 +90,7 @@
     <table class="table table-striped">
       <thead>
           <tr>
-              <th>Your Shortlist! &#129651;  &#128195;</th>
+              <h2><th>Your Shortlist! &#129651;  &#128195;</th></h2>
 
           </tr>
       </thead>
@@ -106,13 +111,6 @@
 </div>
 
 
-
-
-    
-  
-    
-
-    <br>
     <br>
     <br>
     <a class="btn btn-primary" th:href="@{/apikey/redis/fordemo}">(demo) Places Stored in Redis</a>
