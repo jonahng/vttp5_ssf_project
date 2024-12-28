@@ -56,7 +56,8 @@ public class MapRepo {
     }
 
     public void oneHourExpire(String redisKey){
-        redisTemplate.expire(redisKey, 3600, TimeUnit.SECONDS);
+        //made it 15 minutes instead
+        redisTemplate.expire(redisKey, 900, TimeUnit.SECONDS);
         System.out.println("Set redis to 1hour expire:" + redisKey);
     }
 }
