@@ -71,7 +71,7 @@
         <input type="hidden" class="form-control" name="googleMapsUrl" th:field="*{googleMapsUrl}" placeholder="googleMapsUrl">
     </div>
 
-      <button type="submit" class="btn btn-primary">Add to Shortlist!</button>
+      <button type="submit" class="btn btn-primary">Keep in shortlist and show next suggestion</button>
   </form>
   
     <br>
@@ -79,7 +79,25 @@
     <a class="btn btn-danger" th:href="@{/sessions/clear}">Logout session</a>
     <br>
 
-
+    <table class="table table-striped">
+      <thead>
+          <tr>
+              <th>Shortlist: Place Name</th>
+              <th>Google Maps Links</th>
+          </tr>
+      </thead>
+      <tbody>
+          <tr th:each="s, state: ${shortListObjects}">
+              <div th:if="${state.size gt 0}">
+                <td th:utext="${s.placeName}"></td>
+                <td><a class="btn btn-primary" th:href="@{${s.googleMapsUrl}}" target="_blank">Visit on Google Maps</a>
+              </div>
+              <div th:if="${state.size le 1}">
+                  Nothing in your shortlist yet!
+              </div>
+          </tr>
+      </tbody>
+  </table>
   
     
 

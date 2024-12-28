@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.jonah.vttp5_ssf_project.Models.Location;
 import com.jonah.vttp5_ssf_project.Models.Place;
+import com.jonah.vttp5_ssf_project.Models.ShortListPlace;
 import com.jonah.vttp5_ssf_project.Services.PlaceService;
 
 import jakarta.servlet.http.HttpSession;
@@ -233,6 +234,21 @@ public class PlaceController {
         //add new place to model
         //return the suggestionpage with the new place in the mode, not redirect!
         model.addAttribute("place", highestRatedPlace);
+
+
+        //for shortlist:
+        String oldShortList = httpSession.getAttribute("shortList").toString();
+        List<String> oldShortListArray = new ArrayList<String>(Arrays.asList(oldShortList.split(",")));
+        model.addAttribute("shortList", oldShortListArray);
+        String oldShortListOfNames = httpSession.getAttribute("shortListPlaceNames").toString();
+        List<String> oldShortListOfNamesArray = new ArrayList<String>(Arrays.asList(oldShortListOfNames.split(",")));
+
+        List<ShortListPlace> shortListedPlacesObjects = new ArrayList<>();
+        for(String gmapsURL : oldShortListArray){
+            ShortListPlace shortListPlace = new ShortListPlace(oldShortListOfNamesArray.get(oldShortListArray.indexOf(gmapsURL)), gmapsURL);
+            shortListedPlacesObjects.add(shortListPlace);
+        }
+        model.addAttribute("shortListObjects", shortListedPlacesObjects);
         return "suggestionpage";
     }
 
@@ -240,15 +256,76 @@ public class PlaceController {
 
     @PostMapping("/suggestion/shortlist")
     public String postShortlist(@ModelAttribute("place") Place place, HttpSession httpSession, Model model){
-        String oldShortList = httpSession.getAttribute("shortList").toString();
-        String updatedShortList = oldShortList + place.getId().toString();
+        String existingShortList = httpSession.getAttribute("shortList").toString();
+        String updatedShortList = existingShortList +  place.getGoogleMapsUrl().toString() + ",";
 
         httpSession.setAttribute("shortList", updatedShortList);
+
+
+        String existingShortListNames = httpSession.getAttribute("shortListPlaceNames").toString();
+        String updatedShortListNames = existingShortListNames + place.getDisplayName().toString() + ",";
+
+        httpSession.setAttribute("shortListPlaceNames", updatedShortListNames);
         //get the short list, which should have been initialised as empty list of place
         //add new place to list of places
         //set shortlist to updated list
         
         System.out.println("the updated shortlist is:" + updatedShortList);
-        return "redirect:/suggestion";
+        if(httpSession.getAttribute("session") ==null){
+            System.out.println("user is not logged in yet!");
+            return "redirect:/sessions";
+        }
+        String sessionName = httpSession.getAttribute("fullName").toString();
+        model.addAttribute("sessionName", sessionName);
+        System.out.println("the current http session is:" + sessionName);
+        
+
+        System.out.println("post place received: " + place);
+
+
+        String redisData = placeService.readFromRedis(sessionName, sessionName);
+        List<Place> allPlaces = placeService.parsePlaceObjects(redisData);
+
+
+        placeService.addIdToIgnoreList(sessionName, place.getId()); 
+        List<Place> allPlacesMinusAllChecked = placeService.removePlacesFromPlaceList(allPlaces, placeService.getListOfIdToIgnore(sessionName));
+
+
+        //model.addAttribute("allPlaces", allPlaces);
+        /* List<Place> allPlacesMinusPrevious = placeService.removePlaceFromPlaceListUpdateIndexRepo(place, allPlaces,sessionName);
+        List<Integer> listOfPlacesToRemove = placeService.getIntegerListMapRepoForIndexes(sessionName);
+        System.out.println("index of the places to remove is:" + listOfPlacesToRemove);
+        List<Place> allPlacesMinusAllChecked = allPlaces;
+        for(int i : listOfPlacesToRemove){
+            allPlaces.remove(i);
+        } */
+
+
+        Place highestRatedPlace = placeService.highestRatedPlace(allPlacesMinusAllChecked);//CHANGE THIS TO ALLPLACESMINUSALLCHECKED
+
+        //get service to find new place,
+        //add new place to model
+        //return the suggestionpage with the new place in the mode, not redirect!
+        model.addAttribute("place", highestRatedPlace);
+
+
+        //for shortlist:
+        String oldShortList = httpSession.getAttribute("shortList").toString();
+        List<String> oldShortListArray = new ArrayList<String>(Arrays.asList(oldShortList.split(",")));
+        model.addAttribute("shortList", oldShortListArray);
+        
+
+        String oldShortListOfNames = httpSession.getAttribute("shortListPlaceNames").toString();
+        List<String> oldShortListOfNamesArray = new ArrayList<String>(Arrays.asList(oldShortListOfNames.split(",")));
+
+        List<ShortListPlace> shortListedPlacesObjects = new ArrayList<>();
+        for(String gmapsURL : oldShortListArray){
+            ShortListPlace shortListPlace = new ShortListPlace(oldShortListOfNamesArray.get(oldShortListArray.indexOf(gmapsURL)), gmapsURL);
+            shortListedPlacesObjects.add(shortListPlace);
+        }
+        model.addAttribute("shortListObjects", shortListedPlacesObjects);
+
+
+        return "suggestionpage";
     }
 }

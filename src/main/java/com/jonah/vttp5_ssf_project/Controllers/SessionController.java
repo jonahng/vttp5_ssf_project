@@ -67,6 +67,8 @@ public class SessionController {
 
         String shortList = "";
         httpSession.setAttribute("shortList", shortList);
+        String shortListPlaceNames = "";
+        httpSession.setAttribute("shortListPlaceNames", shortListPlaceNames);
        
 
         model.addAttribute("sessions", sessions);
