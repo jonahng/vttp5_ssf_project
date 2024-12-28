@@ -33,7 +33,9 @@
           <h4>Hey <span th:text="${sessionName}"></span>, how about?</h4>
           <br>
           
-
+          <div th:if="${place.rating le 0}">
+            <h4>That's all the suggestions we have! &#128531;</h4>
+          </div>
           
           
             <h3 th:text="${place.displayName}">place name</h3>
@@ -77,8 +79,12 @@
 
   
     <a class="btn btn-danger" th:href="@{/sessions/clear}">Logout session</a>
-    <a class="btn btn-primary" th:href="@{/apikey/redis}">Page of Places Stored in Redis</a>
-    <a class="btn btn-primary" th:href="@{/apikey/redis}">Behind the scenes</a>
+
+    <br>
+    <br>
+    <br>
+    <a class="btn btn-primary" th:href="@{/apikey/redis/fordemo}">Page of Places Stored in Redis</a>
+    <a class="btn btn-primary" th:href="@{/apikey/fordemo}">Json Received</a>
 
   </div>
     

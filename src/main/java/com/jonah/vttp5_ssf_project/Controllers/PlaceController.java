@@ -88,12 +88,51 @@ public class PlaceController {
 
         model.addAttribute("sessionName", sessionName);
         model.addAttribute("googleReply", googleReply);
+        return "redirect:/apikey/redis";
+    }
+
+    @GetMapping("/apikey/fordemo")
+    public String demoprintapikey(HttpSession httpSession, Model model){
+        placeService.printApiKey();
+
+        if(httpSession.getAttribute("session") ==null){
+            System.out.println("user is not logged in yet!");
+            return "redirect:/sessions";
+        }
+        String sessionName = httpSession.getAttribute("fullName").toString();
+        System.out.println("fullName is : " + sessionName);
+        System.out.println("HTTP SESSION Session" + httpSession.getAttribute("session"));
+
+        String googleReply = placeService.tryPlaceApi(sessionName, Double.parseDouble(httpSession.getAttribute("longitude").toString()), Double.parseDouble(httpSession.getAttribute("latitude").toString()));
+
+        model.addAttribute("sessionName", sessionName);
+        model.addAttribute("googleReply", googleReply);
         return "embedmap";
     }
 
 
     @GetMapping("/apikey/redis")
     public String readFromRedis(HttpSession httpSession, Model model){
+
+        if(httpSession.getAttribute("session") ==null){
+            System.out.println("user is not logged in yet!");
+            return "redirect:/sessions";
+        }
+
+        String sessionName = httpSession.getAttribute("fullName").toString();
+        model.addAttribute("sessionName", sessionName);
+
+        String redisData = placeService.readFromRedis(sessionName, sessionName);
+        List<Place> allPlaces = placeService.parsePlaceObjects(redisData);
+        model.addAttribute("allPlaces", allPlaces);
+        System.out.println("\n Highest Rated Place is:" + placeService.highestRatedPlace(allPlaces));
+
+        return "redirect:/suggestion";
+    }
+
+
+    @GetMapping("/apikey/redis/fordemo")
+    public String demoreadFromRedis(HttpSession httpSession, Model model){
 
         if(httpSession.getAttribute("session") ==null){
             System.out.println("user is not logged in yet!");
