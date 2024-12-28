@@ -31,9 +31,10 @@
     <div style="padding-top: 14%;">
         <div class="text-center">
             
-            <h3>Hi <span th:text="${sessionName}"></span>! &#10084;&#65039;</h3>
+            <h2>Hi <span th:text="${sessionName}"></span>! &#10084;&#65039;</h2>
             <br>
-            <h4>Where do you want to search for food? &#127829;</h4>
+            <h3 class="fw-light">Where do you want to search for food? &#127829;</h3>
+            <br>
         </div>
     
 </div>
@@ -41,15 +42,17 @@
 
     <div class="container">
     <div class="text-center">
+        
 <form method="post" th:action="@{/location}" enctype="application/x-www-form-urlencoded">
-
-    <input id="searchTextField" type="text" size="60" placeholder="Enter a location to search" autocomplete="on" runat="server" />  
+    <div class="input-large"></div>
+    <input id="searchTextField" type="text" size="60" placeholder="  Enter a location to search..." autocomplete="on" runat="server" class="input-large rounded-pill "/>  
     <input type="hidden" id="placeName" name="placeName" />
     <input type="hidden" id="placeLat" name="placeLat" />
     <input type="hidden" id="placeLong" name="placeLong" />
 
-<button type="submit" class="btn btn-primary">Confirm location!</button>
+<button type="submit" class="btn btn-primary rounded-pill input-sm">Confirm location!</button>
 </form>
+
 </div>
 </div>
 
