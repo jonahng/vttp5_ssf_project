@@ -328,4 +328,12 @@ public class PlaceController {
 
         return "suggestionpage";
     }
+
+
+    @GetMapping("/context")
+    public String contextPicture(){
+
+        return "context";
+    }
+
 }
